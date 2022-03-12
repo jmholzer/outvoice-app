@@ -205,9 +205,6 @@ export default function InvoiceForm() {
     return (
         <React.Fragment>
             <Box mt={2} />
-            <Typography variant="body2" gutterBottom>
-                Complete the form to generate an invoice.
-            </Typography>
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={5}>
