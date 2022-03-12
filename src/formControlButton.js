@@ -17,8 +17,8 @@ const buttonLabels = {
 }
 
 const buttonStyle = {
-  color: "#4A4A4A",
-  borderColor: "#4A4A4A",
+  color: "#3B97D3",
+  borderColor: "#3B97D3",
   width: "162px",
   marginLeft: "10px",
   marginRight: "10px"
