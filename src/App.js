@@ -6,6 +6,9 @@ import { withStyles } from '@material-ui/core/styles';
 import InvoiceForm from './invoiceGeneration';
 import Divider from '@material-ui/core/Divider';
 import Box from '@material-ui/core/Box';
+import { Icon } from "@material-ui/core";
+import Grid from '@material-ui/core/Grid';
+import outvoice from './outvoice-icon/outvoice.svg'
 
 const TitleTypography = withStyles({
   root: {
@@ -13,13 +16,28 @@ const TitleTypography = withStyles({
   }
 })(Typography);
 
+const Logo = () => {
+  return (
+    <Icon>
+          <img src={outvoice} height={60} width={60}/>
+    </Icon>
+  )
+}
+
 const MainHeader = () => {
   return (
     <div>
-      <Container maxWidth="md" style={{ height: '120px', backgroundColor: '#FFFFFF' }}>
-        <TitleTypography variant='h2'>
-          Outvoice
-        </TitleTypography>
+      <Container maxWidth="md" style={{ height: '120px', backgroundColor: '#FFFFFF', 'paddingTop': '15px' }}>
+        <Grid container spacing={0}>
+          <Grid item display="inline">
+            <TitleTypography component="div" sx={{ display: 'inline' }} variant='h2'>
+              Outvoice
+            </TitleTypography>
+          </Grid>
+          <Grid item display="inline" style={{ width: "200px" }}>
+            <Logo component="div" />
+          </Grid>
+        </Grid>
         <Box mt={1} />
         <Box mt={1} />
         <Divider />
