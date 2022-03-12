@@ -236,7 +236,7 @@ export default function InvoiceForm() {
                     </Grid>
                     <Grid item xs={12} sm={1}>
                         <IconButton aria-label="delete" onClick={handleClientDelete} style={{ 'paddingTop': '15px' }}>
-                            <Delete style={{ color: "#E33327" }} />
+                            <Delete style={{ color: "#3B97D3" }} />
                         </IconButton>
                     </Grid>
                     <Grid item xs={12}>
