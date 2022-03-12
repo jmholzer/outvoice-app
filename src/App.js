@@ -3,7 +3,7 @@ import './App.css';
 import Container from '../node_modules/@material-ui/core/Container';
 import Typography from '../node_modules/@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import InvoiceForm from './invoiceGeneration';
+import WorkflowTabs from './workflowTabs';
 import Divider from '@material-ui/core/Divider';
 import Box from '@material-ui/core/Box';
 import { Icon } from "@material-ui/core";
@@ -40,7 +40,6 @@ const MainHeader = () => {
         </Grid>
         <Box mt={1} />
         <Box mt={1} />
-        <Divider />
       </Container>
     </div>
   )
@@ -51,7 +50,7 @@ const App = () => {
     <div>
       <MainHeader />
       <Container maxWidth="md" style={{ height: '100%' }}>
-        <InvoiceForm />
+        <WorkflowTabs />
       </Container>
     </div>
   );
