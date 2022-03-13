@@ -13,7 +13,11 @@ import MomentUtils from '@date-io/moment';
 import * as cloneDeep from 'lodash/cloneDeep';
 import Notification from './notification';
 import Box from '@material-ui/core/Box';
-import Paper from '@material-ui/core/Paper';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+
+
 
 const defaultFormValues = {
     firstName: "",
@@ -34,11 +38,23 @@ const defaultAlertState = {
     message: "",
 };
 
+  
 var searchResults = {};
 
 export default function InvoiceForm() {
     const [formValues, setFormValues] = useState(defaultFormValues);
     const [alert, setAlert] = useState(defaultAlertState)
+
+    const [rowData] = useState([
+        {"Item": "Example", "Price per Item": "10", "Billable Units": 10, "Subtotal": 100}
+    ]);
+    
+    const [columnDefs] = useState([
+        { field: "Item", resizable: true, minWidth: 400 },
+        { field: "Price per Item", resizable: true, minWidth:  30 },
+        { field: "Billable Units", resizable: true, minWidth: 30 },
+        { field: "Subtotal", resizable: true, minWidth: 30 }
+    ]);   
 
     const resetAlertState = () => {
         setAlert(defaultAlertState);
@@ -318,47 +334,18 @@ export default function InvoiceForm() {
                             />
                         </MuiPickersUtilsProvider>
                     </Grid>
-                    <Grid item xs={12} sm={8}>
-                        <TextField
-                            required
-                            id="lineItem1"
-                            name="lineItem1"
-                            label="Line Item 1"
-                            fullWidth
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            value={formValues.receiptDescription}
-                            onChange={handleInputChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={2}>
-                        <TextField
-                            required
-                            id="lineItem1Tax"
-                            name="lineItem1Tax"
-                            label="Tax"
-                            fullWidth
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            value={formValues.receiptDescription}
-                            onChange={handleInputChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={2}>
-                        <TextField
-                            required
-                            id="lineItem1Value"
-                            name="lineItem1Value"
-                            label="Value"
-                            fullWidth
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            value={formValues.receiptDescription}
-                            onChange={handleInputChange}
-                        />
+                    <Grid item xs={12} sm={12}>
+                        <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }} >
+                            <AgGridReact
+                                rowData={rowData}
+                                columnDefs={columnDefs}
+                                domLayout={'autoHeight'}
+                                onGridReady={e => {
+                                    e.api.sizeColumnsToFit();
+                                    e.columnApi.resetColumnState();
+                                }}>
+                            </AgGridReact>
+                        </div>
                     </Grid>
                     <Grid container>
                         <div style={{ height: "30px" }} />
