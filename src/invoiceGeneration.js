@@ -14,6 +14,7 @@ import * as cloneDeep from 'lodash/cloneDeep';
 import Notification from './notification';
 import Box from '@material-ui/core/Box';
 import { AgGridReact } from 'ag-grid-react';
+import Divider from '@material-ui/core/Divider';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
@@ -223,6 +224,12 @@ export default function InvoiceForm() {
             <Box mt={2} />
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
+                    <Typography variant="h6" gutterBottom component="div">
+                        Recipient Information
+                    </Typography>
+                    <Grid item xs={12} sm={12}>
+                        <Divider />
+                    </Grid>
                     <Grid item xs={12} sm={5}>
                         <TextField
                             required
@@ -298,6 +305,28 @@ export default function InvoiceForm() {
                             onChange={handleInputChange}
                         />
                     </Grid>
+                    <Grid container>
+                        <div style={{ height: "20px" }} />
+                    </Grid>
+                    <Typography variant="h6" gutterBottom component="div">
+                        Payables
+                    </Typography>
+                    <Grid item xs={12} sm={12}>
+                        <Divider />
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                        <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }} >
+                            <AgGridReact
+                                rowData={rowData}
+                                columnDefs={columnDefs}
+                                domLayout={'autoHeight'}
+                                onGridReady={e => {
+                                    e.api.sizeColumnsToFit();
+                                    e.columnApi.resetColumnState();
+                                }}>
+                            </AgGridReact>
+                        </div>
+                    </Grid>
                     <Grid item xs={12} sm={4}>
                         <TextField
                             required
@@ -333,19 +362,6 @@ export default function InvoiceForm() {
                                 onChange={handleInputChange}
                             />
                         </MuiPickersUtilsProvider>
-                    </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }} >
-                            <AgGridReact
-                                rowData={rowData}
-                                columnDefs={columnDefs}
-                                domLayout={'autoHeight'}
-                                onGridReady={e => {
-                                    e.api.sizeColumnsToFit();
-                                    e.columnApi.resetColumnState();
-                                }}>
-                            </AgGridReact>
-                        </div>
                     </Grid>
                     <Grid container>
                         <div style={{ height: "30px" }} />
