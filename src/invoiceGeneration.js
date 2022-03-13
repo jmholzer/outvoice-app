@@ -18,8 +18,6 @@ import Divider from '@material-ui/core/Divider';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
-
-
 const defaultFormValues = {
     firstName: "",
     lastName: "",
@@ -39,6 +37,20 @@ const defaultAlertState = {
     message: "",
 };
 
+function currencyFormatter(currency, sign) {
+    console.log(currency)
+    if (typeof currency == 'undefined') {
+        return sign
+    }
+    var sansDec = currency.toFixed(2);
+    var formatted = sansDec.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return sign + `${formatted}`;
+}
+
+const calculateAmountDue = (params) => {
+    let amountDue = Number(params.data.count) * Number(params.data.costPerItem);
+    return currencyFormatter(amountDue, "£")
+};
   
 var searchResults = {};
 
@@ -47,15 +59,52 @@ export default function InvoiceForm() {
     const [alert, setAlert] = useState(defaultAlertState)
 
     const [rowData] = useState([
-        {"Item": "Example", "Price per Item": "10", "Billable Units": 10, "Subtotal": 100}
+        {"item": "Example", "costPerItem": 10, "count": 10}
     ]);
     
     const [columnDefs] = useState([
-        { field: "Item", resizable: true, minWidth: 400 },
-        { field: "Price per Item", resizable: true, minWidth:  30 },
-        { field: "Billable Units", resizable: true, minWidth: 30 },
-        { field: "Subtotal", resizable: true, minWidth: 30 }
-    ]);   
+        {
+            headerName: "Item",
+            field: "item",
+            resizable: true,
+            minWidth: 400,
+            editable: true
+        },
+        {
+            headerName: "Cost per Item",
+            field: "costPerItem",
+            resizable: true,
+            minWidth: 30,
+            editable: true,
+            valueFormatter: params => currencyFormatter(params.data.costPerItem, '£'),
+            filter: 'agNumberColumnFilter',
+            filterParams: {
+              suppressAndOrCondition: true,
+              filterOptions: ['greaterThan'],
+            }
+        },
+        {
+            headerName: "Count",
+            field: "count",
+            resizable: true,
+            minWidth: 30,
+            valueFormatter: params => Number(params.data.count),
+            editable: true
+        },
+        {
+            headerName: "Amount Due",
+            field: "amountDue",
+            resizable: true,
+            minWidth: 30,
+            //valueFormatter: params => currencyFormatter(params.data.amountDue, '£'),
+            filter: 'agNumberColumnFilter',
+            filterParams: {
+              suppressAndOrCondition: true,
+              filterOptions: ['greaterThan'],
+            },
+            valueGetter: calculateAmountDue
+        }
+    ]);
 
     const resetAlertState = () => {
         setAlert(defaultAlertState);
@@ -320,6 +369,8 @@ export default function InvoiceForm() {
                                 rowData={rowData}
                                 columnDefs={columnDefs}
                                 domLayout={'autoHeight'}
+                                enableCellChangeFlash={true}
+                                animateRows={true}
                                 onGridReady={e => {
                                     e.api.sizeColumnsToFit();
                                     e.columnApi.resetColumnState();
