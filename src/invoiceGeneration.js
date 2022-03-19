@@ -3,6 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
+import Add from '@material-ui/icons/Add';
+import Remove from '@material-ui/icons/Remove';
 import Search from '@material-ui/icons/Search';
 import Delete from '@material-ui/icons/Delete';
 import FormControlButton from './formControlButton';
@@ -378,6 +380,20 @@ export default function InvoiceForm() {
                             </AgGridReact>
                         </div>
                     </Grid>
+                    <Grid container justify="center" sm={12}>
+                        <IconButton aria-label="add" style={{ 'paddingTop': '15px' }}>
+                            <Add style={{ color: "#3B97D3" }} />
+                        </IconButton>
+                        <IconButton aria-label="add" style={{ 'paddingTop': '15px' }}>
+                            <Remove style={{ color: "#3B97D3" }} />
+                        </IconButton>
+                    </Grid>
+                    <Typography variant="h6" gutterBottom component="div">
+                        Payables
+                    </Typography>
+                    <Grid item xs={12} sm={12}>
+                        <Divider />
+                    </Grid>
                     <Grid item xs={12} sm={4}>
                         <TextField
                             required
@@ -421,10 +437,12 @@ export default function InvoiceForm() {
                         <FormControlButton
                             buttonType="download"
                             name="download"
+                            style="form"
                         />
                         <FormControlButton
                             buttonType="print"
                             name="print"
+                            style="form"
                         />
                     </Grid>
                 </Grid>
