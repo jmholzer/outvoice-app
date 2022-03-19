@@ -24,7 +24,7 @@ const buttonStyle = {
   marginRight: "10px"
 };
 
-export default function PrintLabelButton(props) {
+export default function FormControlButton(props) {
   var Icon = buttonIcons[props.buttonType];
 
   return (
