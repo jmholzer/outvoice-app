@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -40,10 +40,10 @@ const defaultAlertState = {
 };
 
 function currencyFormatter(currency, sign) {
-    console.log(currency)
     if (typeof currency == 'undefined') {
         return sign
     }
+    currency = Number(currency);
     var sansDec = currency.toFixed(2);
     var formatted = sansDec.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return sign + `${formatted}`;
@@ -53,17 +53,24 @@ const calculateAmountDue = (params) => {
     let amountDue = Number(params.data.count) * Number(params.data.costPerItem);
     return currencyFormatter(amountDue, "£")
 };
+
+function createLineItem() {
+    const item = {
+        "item": "",
+        "costPerItem": null,
+        "count": null
+    };
+    return item;
+}
   
 var searchResults = {};
 
 export default function InvoiceForm() {
     const [formValues, setFormValues] = useState(defaultFormValues);
-    const [alert, setAlert] = useState(defaultAlertState)
-
-    const [rowData] = useState([
+    const [alert, setAlert] = useState(defaultAlertState);
+    const [rowData, setRowData] = useState([
         {"item": "Example", "costPerItem": 10, "count": 10}
     ]);
-    
     const [columnDefs] = useState([
         {
             headerName: "Item",
@@ -107,6 +114,26 @@ export default function InvoiceForm() {
             valueGetter: calculateAmountDue
         }
     ]);
+
+    const addRow = useCallback(
+        () => {
+            const newStore = rowData.slice();
+            const newLineItem = createLineItem();
+            newStore.push(newLineItem)
+            setRowData(newStore);
+        },
+        [rowData]
+    );
+
+    const gridRef = useRef();
+
+    const removeRow = useCallback(() => {
+        const selectedRowNodes = gridRef.current.api.getSelectedNodes();
+        const selectedIds = selectedRowNodes.map(function (rowNode) {
+            return Number(rowNode.id);
+        });;
+        setRowData(rowData.filter((_, index) => !selectedIds.includes(index)));
+    }, [rowData]);
 
     const resetAlertState = () => {
         setAlert(defaultAlertState);
@@ -368,11 +395,13 @@ export default function InvoiceForm() {
                     <Grid item xs={12} sm={12}>
                         <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }} >
                             <AgGridReact
+                                ref={gridRef}
                                 rowData={rowData}
                                 columnDefs={columnDefs}
                                 domLayout={'autoHeight'}
                                 enableCellChangeFlash={true}
                                 animateRows={true}
+                                rowSelection='single'
                                 onGridReady={e => {
                                     e.api.sizeColumnsToFit();
                                     e.columnApi.resetColumnState();
@@ -381,10 +410,10 @@ export default function InvoiceForm() {
                         </div>
                     </Grid>
                     <Grid container justify="center" sm={12}>
-                        <IconButton aria-label="add" style={{ 'paddingTop': '15px' }}>
+                        <IconButton onClick={() => addRow()} aria-label="add" style={{ 'paddingTop': '15px' }}>
                             <Add style={{ color: "#3B97D3" }} />
                         </IconButton>
-                        <IconButton aria-label="add" style={{ 'paddingTop': '15px' }}>
+                        <IconButton onClick={() => removeRow()} aria-label="add" style={{ 'paddingTop': '15px' }}>
                             <Remove style={{ color: "#3B97D3" }} />
                         </IconButton>
                     </Grid>
