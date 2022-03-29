@@ -9,6 +9,7 @@ import Remove from '@material-ui/icons/Remove';
 import Search from '@material-ui/icons/Search';
 import Delete from '@material-ui/icons/Delete';
 import FormControlButton from './formControlButton';
+import TotalSum from './totalSum';
 import download from './download';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Moment from 'moment'
@@ -130,6 +131,11 @@ export default function InvoiceForm() {
         });;
         setRowData(rowData.filter((_, index) => !selectedIds.includes(index)));
     }, [rowData]);
+
+    const onCellValueChanged = useCallback((params) => {
+        let data = [...rowData]
+        setRowData(data);
+    })
 
     const resetAlertState = () => {
         setAlert(defaultAlertState);
@@ -398,6 +404,7 @@ export default function InvoiceForm() {
                                 enableCellChangeFlash={true}
                                 animateRows={true}
                                 rowSelection='single'
+                                onCellValueChanged={onCellValueChanged}
                                 onGridReady={e => {
                                     e.api.sizeColumnsToFit();
                                     e.columnApi.resetColumnState();
@@ -405,7 +412,6 @@ export default function InvoiceForm() {
                             </AgGridReact>
                         </div>
                     </Grid>
-
                     <Grid container justify="center" sm={12}>
                         <IconButton onClick={() => addRow()} aria-label="add" style={{ 'paddingTop': '5px' }}>
                             <Add style={{ color: "#3B97D3" }} />
@@ -417,7 +423,7 @@ export default function InvoiceForm() {
                     <Grid container justify="space-between" sm={12}>
                         <Grid container justify="space-between">  
                             <Typography inline variant="h6" align="left"></Typography>
-                            <Typography inline variant="subtitle1" align="right" style={{ 'paddingRight': '100px' }}>Total: {rowData[0].count}</Typography>
+                            <TotalSum rowData={rowData}></TotalSum>
                         </Grid>
                     </Grid>
                     <BlueTextTypography variant="h6" gutterBottom component="div">
