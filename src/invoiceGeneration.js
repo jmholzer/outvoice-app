@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
+import { withStyles } from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -19,6 +20,13 @@ import { AgGridReact } from 'ag-grid-react';
 import Divider from '@material-ui/core/Divider';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import { currencyFormatter } from './currencyFormatter.js';
+
+const BlueTextTypography = withStyles({
+    root: {
+        color: "#3B97D3"
+    }
+})(Typography);
 
 const defaultFormValues = {
     firstName: "",
@@ -28,9 +36,7 @@ const defaultFormValues = {
     addressLine2: "",
     city: "",
     postCode: "",
-    receiptAmount: "",
-    receiptNumber: "",
-    receiptDescription: "",
+    invoiceNumber: "",
 };
 
 const defaultAlertState = {
@@ -38,16 +44,6 @@ const defaultAlertState = {
     severity: "",
     message: "",
 };
-
-function currencyFormatter(currency, sign) {
-    if (typeof currency == 'undefined') {
-        return sign
-    }
-    currency = Number(currency);
-    var sansDec = currency.toFixed(2);
-    var formatted = sansDec.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    return sign + `${formatted}`;
-}
 
 const calculateAmountDue = (params) => {
     let amountDue = Number(params.data.count) * Number(params.data.costPerItem);
@@ -302,9 +298,9 @@ export default function InvoiceForm() {
             <Box mt={2} />
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
-                    <Typography variant="h6" gutterBottom component="div">
-                        Recipient Information
-                    </Typography>
+                    <BlueTextTypography variant="h6" gutterBottom component="div">
+                        Client's details...
+                    </BlueTextTypography>
                     <Grid item xs={12} sm={12}>
                         <Divider />
                     </Grid>
@@ -313,7 +309,7 @@ export default function InvoiceForm() {
                             required
                             id="firstName"
                             name="firstName"
-                            label="First name"
+                            label="Client's first name"
                             fullWidth
                             value={formValues.firstName}
                             onChange={handleInputChange}
@@ -324,7 +320,7 @@ export default function InvoiceForm() {
                             required
                             id="lastName"
                             name="lastName"
-                            label="Last name"
+                            label="Client's last name"
                             fullWidth
                             value={formValues.lastName}
                             onChange={handleInputChange}
@@ -345,7 +341,7 @@ export default function InvoiceForm() {
                             required
                             id="addressLine1"
                             name="addressLine1"
-                            label="Address line 1"
+                            label="Client's address (line 1)"
                             fullWidth
                             value={formValues.addressLine1}
                             onChange={handleInputChange}
@@ -355,7 +351,7 @@ export default function InvoiceForm() {
                         <TextField
                             id="addressLine2"
                             name="addressLine2"
-                            label="Address line 2"
+                            label="Client's address (line 2)"
                             fullWidth
                             value={formValues.addressLine2}
                             onChange={handleInputChange}
@@ -366,7 +362,7 @@ export default function InvoiceForm() {
                             required
                             id="city"
                             name="city"
-                            label="Town / City"
+                            label="Client's city"
                             fullWidth
                             value={formValues.city}
                             onChange={handleInputChange}
@@ -377,7 +373,7 @@ export default function InvoiceForm() {
                             required
                             id="postCode"
                             name="postCode"
-                            label="Post code"
+                            label="Client's postcode"
                             fullWidth
                             value={formValues.postCode}
                             onChange={handleInputChange}
@@ -386,9 +382,9 @@ export default function InvoiceForm() {
                     <Grid container>
                         <div style={{ height: "20px" }} />
                     </Grid>
-                    <Typography variant="h6" gutterBottom component="div">
-                        Payables
-                    </Typography>
+                    <BlueTextTypography variant="h6" gutterBottom component="div">
+                        Request payment for...
+                    </BlueTextTypography>
                     <Grid item xs={12} sm={12}>
                         <Divider />
                     </Grid>
@@ -409,39 +405,35 @@ export default function InvoiceForm() {
                             </AgGridReact>
                         </div>
                     </Grid>
+
                     <Grid container justify="center" sm={12}>
-                        <IconButton onClick={() => addRow()} aria-label="add" style={{ 'paddingTop': '15px' }}>
+                        <IconButton onClick={() => addRow()} aria-label="add" style={{ 'paddingTop': '5px' }}>
                             <Add style={{ color: "#3B97D3" }} />
                         </IconButton>
-                        <IconButton onClick={() => removeRow()} aria-label="add" style={{ 'paddingTop': '15px' }}>
+                        <IconButton onClick={() => removeRow()} aria-label="add" style={{ 'paddingTop': '5px' }}>
                             <Remove style={{ color: "#3B97D3" }} />
                         </IconButton>
                     </Grid>
-                    <Typography variant="h6" gutterBottom component="div">
-                        Payables
-                    </Typography>
+                    <Grid container justify="space-between" sm={12}>
+                        <Grid container justify="space-between">  
+                            <Typography inline variant="h6" align="left"></Typography>
+                            <Typography inline variant="subtitle1" align="right" style={{ 'paddingRight': '100px' }}>Total: {rowData[0].count}</Typography>
+                        </Grid>
+                    </Grid>
+                    <BlueTextTypography variant="h6" gutterBottom component="div">
+                        Last steps...
+                    </BlueTextTypography>
                     <Grid item xs={12} sm={12}>
                         <Divider />
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <TextField
                             required
-                            id="receiptAmount"
-                            name="receiptAmount"
-                            label="Receipt Amount"
+                            id="invoiceNumber"
+                            name="invoiceNumber"
+                            label="Invoice number"
                             fullWidth
-                            value={formValues.receiptAmount}
-                            onChange={handleInputChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <TextField
-                            required
-                            id="receiptNumber"
-                            name="receiptNumber"
-                            label="Receipt Number"
-                            fullWidth
-                            value={formValues.receiptNumber}
+                            value={formValues.invoiceNumber}
                             onChange={handleInputChange}
                         />
                     </Grid>
@@ -453,7 +445,21 @@ export default function InvoiceForm() {
                                 format="DD/MM/YYYY"
                                 id="invoiceDate"
                                 name="invoiceDate"
-                                label="Invoice Date"
+                                label="Invoice dated"
+                                value={formValues.invoiceDate}
+                                onChange={handleInputChange}
+                            />
+                        </MuiPickersUtilsProvider>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <MuiPickersUtilsProvider utils={MomentUtils}>
+                            <KeyboardDatePicker
+                                required
+                                clearable
+                                format="DD/MM/YYYY"
+                                id="payDate"
+                                name="payDate"
+                                label="Client to pay on"
                                 value={formValues.invoiceDate}
                                 onChange={handleInputChange}
                             />
@@ -469,8 +475,8 @@ export default function InvoiceForm() {
                             style="form"
                         />
                         <FormControlButton
-                            buttonType="print"
-                            name="print"
+                            buttonType="email"
+                            name="email"
                             style="form"
                         />
                     </Grid>
