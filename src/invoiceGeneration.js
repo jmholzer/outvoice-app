@@ -9,6 +9,8 @@ import Remove from '@material-ui/icons/Remove';
 import Search from '@material-ui/icons/Search';
 import Delete from '@material-ui/icons/Delete';
 import FormControlButton from './formControlButton';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import TotalSum from './totalSum';
 import download from './download';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -38,6 +40,7 @@ const defaultFormValues = {
     city: "",
     postCode: "",
     invoiceNumber: "",
+    emailAddress: ""
 };
 
 const defaultAlertState = {
@@ -66,7 +69,7 @@ export default function InvoiceForm() {
     const [formValues, setFormValues] = useState(defaultFormValues);
     const [alert, setAlert] = useState(defaultAlertState);
     const [rowData, setRowData] = useState([
-        {"item": "Example", "costPerItem": 10, "count": 10}
+        {"item": "", "costPerItem": 0, "count": 0}
     ]);
     const [columnDefs] = useState([
         {
@@ -426,12 +429,7 @@ export default function InvoiceForm() {
                             <TotalSum rowData={rowData}></TotalSum>
                         </Grid>
                     </Grid>
-                    <BlueTextTypography variant="h6" gutterBottom component="div">
-                        Last steps...
-                    </BlueTextTypography>
-                    <Grid item xs={12} sm={12}>
-                        <Divider />
-                    </Grid>
+
                     <Grid item xs={12} sm={4}>
                         <TextField
                             required
@@ -474,12 +472,38 @@ export default function InvoiceForm() {
                     <Grid container>
                         <div style={{ height: "30px" }} />
                     </Grid>
-                    <Grid container justify="center" sm={12}>
-                        <FormControlButton
-                            buttonType="download"
-                            name="download"
-                            style="form"
+                    <BlueTextTypography variant="h6" gutterBottom component="div">
+                        Send to...
+                    </BlueTextTypography>
+                    <Grid item xs={12} sm={12}>
+                        <Divider />
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                        <TextField
+                            required
+                            id="emailAddress"
+                            name="emailAddress"
+                            label="Client's email address"
+                            fullWidth
+                            value={formValues.emailAddress}
+                            onChange={handleInputChange}
                         />
+                    </Grid>
+                    <Grid container justify="center" sm={4}>
+                        <FormControlLabel
+                            control={
+                            <Checkbox
+                                id="downloadCopy"
+                                name="downloadCopy"
+                                color="primary"
+
+                            />
+                            }
+                            label="Download a copy"
+                            style={{ 'paddingLeft': '5px', 'paddingTop': '20px' }}
+                        />
+                    </Grid>
+                    <Grid container justify="center" sm={12} style={{ 'paddingTop': '15px' }}>
                         <FormControlButton
                             buttonType="email"
                             name="email"

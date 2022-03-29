@@ -12,7 +12,7 @@ const buttonIcons = {
 }
 
 const buttonLabels = {
-  email: "Email",
+  email: "Send",
   print: "Print",
   download: "Download",
   printLabel: "Print Label"
