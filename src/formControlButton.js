@@ -5,12 +5,14 @@ import PictureAsPdf from './icons/PictureAsPdf';
 import Print from './icons/Print';
 
 const buttonIcons = {
+  email: Email,
   print: Print,
   download: PictureAsPdf,
   printLabel: Email
 }
 
 const buttonLabels = {
+  email: "Email",
   print: "Print",
   download: "Download",
   printLabel: "Print Label"
