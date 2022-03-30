@@ -8,9 +8,9 @@ import Add from '@material-ui/icons/Add';
 import Remove from '@material-ui/icons/Remove';
 import Search from '@material-ui/icons/Search';
 import Delete from '@material-ui/icons/Delete';
+import Tooltip from '@material-ui/core/Tooltip';
+import CloudDownload from '@material-ui/icons/CloudDownload';
 import FormControlButton from './formControlButton';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import TotalSum from './totalSum';
 import download from './download';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -40,7 +40,8 @@ const defaultFormValues = {
     city: "",
     postCode: "",
     invoiceNumber: "",
-    emailAddress: ""
+    emailAddress: "",
+    ccEmailAddress: "",
 };
 
 const defaultAlertState = {
@@ -478,7 +479,7 @@ export default function InvoiceForm() {
                     <Grid item xs={12} sm={12}>
                         <Divider />
                     </Grid>
-                    <Grid item xs={12} sm={8}>
+                    <Grid item xs={12} sm={5}>
                         <TextField
                             required
                             id="emailAddress"
@@ -489,21 +490,24 @@ export default function InvoiceForm() {
                             onChange={handleInputChange}
                         />
                     </Grid>
-                    <Grid container justify="center" sm={4}>
-                        <FormControlLabel
-                            control={
-                            <Checkbox
-                                id="downloadCopy"
-                                name="downloadCopy"
-                                color="primary"
-
-                            />
-                            }
-                            label="Download a copy"
-                            style={{ 'paddingLeft': '5px', 'paddingTop': '20px' }}
+                    <Grid item xs={12} sm={5}>
+                        <TextField
+                            id="ccEmailAddress"
+                            name="ccEmailAddress"
+                            label="Copy in email address"
+                            fullWidth
+                            value={formValues.ccEmailAddress}
+                            onChange={handleInputChange}
                         />
                     </Grid>
-                    <Grid container justify="center" sm={12} style={{ 'paddingTop': '15px' }}>
+                    <Grid container justify="center" sm={2}>
+                        <IconButton aria-label="download" style={{ 'paddingTop': '15px' }}>
+                            <Tooltip title="Download a copy">
+                                <CloudDownload style={{ color: "#3B97D3" }} />
+                            </Tooltip>
+                        </IconButton>
+                    </Grid>
+                    <Grid container justify="center" sm={12} style={{ 'paddingTop': '17px' }}>
                         <FormControlButton
                             buttonType="email"
                             name="email"
