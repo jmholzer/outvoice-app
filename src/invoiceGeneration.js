@@ -338,12 +338,16 @@ export default function InvoiceForm() {
                     </Grid>
                     <Grid item xs={12} sm={1}>
                         <IconButton aria-label="search" onClick={handleAddressSearch} style={{ 'paddingTop': '15px' }}>
-                            <Search style={{ color: "#3B97D3" }} />
+                            <Tooltip title="Search for client">
+                                <Search style={{ color: "#3B97D3" }} />
+                            </Tooltip>
                         </IconButton>
                     </Grid>
                     <Grid item xs={12} sm={1}>
                         <IconButton aria-label="delete" onClick={handleClientDelete} style={{ 'paddingTop': '15px' }}>
-                            <Delete style={{ color: "#3B97D3" }} />
+                            <Tooltip title="Delete client data from database">
+                                <Delete style={{ color: "#3B97D3" }} />
+                            </Tooltip>
                         </IconButton>
                     </Grid>
                     <Grid item xs={12}>
