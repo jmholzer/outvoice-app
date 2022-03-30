@@ -479,7 +479,7 @@ export default function InvoiceForm() {
                     <Grid item xs={12} sm={12}>
                         <Divider />
                     </Grid>
-                    <Grid item xs={12} sm={5}>
+                    <Grid item xs={12} sm={6}>
                         <TextField
                             required
                             id="emailAddress"
@@ -490,24 +490,22 @@ export default function InvoiceForm() {
                             onChange={handleInputChange}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={5}>
+                    <Grid item xs={12} sm={6}>
                         <TextField
                             id="ccEmailAddress"
                             name="ccEmailAddress"
-                            label="Copy in email address"
+                            label="Cc email address"
                             fullWidth
                             value={formValues.ccEmailAddress}
                             onChange={handleInputChange}
                         />
                     </Grid>
-                    <Grid container justify="center" sm={2}>
-                        <IconButton aria-label="download" style={{ 'paddingTop': '15px' }}>
+                    <Grid container justify="center" sm={12} style={{ 'paddingTop': '17px' }}>
+                        <IconButton aria-label="download"  style={{ 'paddingTop': '15px', 'borderRadius': 0}}>
                             <Tooltip title="Download a copy">
                                 <CloudDownload style={{ color: "#3B97D3" }} />
                             </Tooltip>
                         </IconButton>
-                    </Grid>
-                    <Grid container justify="center" sm={12} style={{ 'paddingTop': '17px' }}>
                         <FormControlButton
                             buttonType="email"
                             name="email"
