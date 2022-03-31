@@ -32,16 +32,17 @@ const BlueTextTypography = withStyles({
 })(Typography);
 
 const defaultFormValues = {
-    firstName: "",
-    lastName: "",
-    invoiceDate: Moment(new Date()),
-    addressLine1: "",
-    addressLine2: "",
+    first_name: "",
+    last_name: "",
+    address_line_1: "",
+    address_line_2: "",
     city: "",
-    postCode: "",
-    invoiceNumber: "",
-    emailAddress: "",
-    ccEmailAddress: "",
+    post_code: "",
+    invoice_number: "",
+    invoice_date: Moment(new Date()),
+    pay_date: Moment(new Date()),
+    email_address: "",
+    cc_email_address: "",
 };
 
 const defaultAlertState = {
@@ -149,7 +150,7 @@ export default function InvoiceForm() {
         if (e._isAMomentObject) {
             setFormValues({
                 ...formValues,
-                ["invoiceDate"]: e
+                ["invoice_date"]: e
             })
         }
         else {
@@ -168,12 +169,12 @@ export default function InvoiceForm() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                firstName: formValues.firstName,
-                lastName: formValues.lastName,
-                addressLine1: formValues.addressLine1,
-                addressLine2: formValues.addressLine2,
+                first_name: formValues.first_name,
+                last_name: formValues.last_name,
+                address_line_1: formValues.address_line_1,
+                address_line_2: formValues.address_line_2,
                 city: formValues.city,
-                postCode: formValues.postCode,
+                post_code: formValues.post_code,
                 method: "remove"
             })
         })
@@ -196,10 +197,10 @@ export default function InvoiceForm() {
 
         setFormValues({
             ...formValues,
-            addressLine1: "",
-            addressLine2: "",
+            address_line_1: "",
+            address_line_2: "",
             city: "",
-            postCode: ""
+            post_code: ""
         });
 
         // reset search results as these may have changed
@@ -207,7 +208,7 @@ export default function InvoiceForm() {
     }
 
     const handleAddressSearch = (event) => {
-        let searchKey = formValues.firstName + formValues.lastName;
+        let searchKey = formValues.first_name + formValues.last_name;
         if (!(searchKey in searchResults)) {
             fetch("http://api.outvoice.com:8000/client", {
                 method: "POST",
@@ -215,12 +216,12 @@ export default function InvoiceForm() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    firstName: formValues.firstName,
-                    lastName: formValues.lastName,
-                    addressLine1: formValues.addressLine1,
-                    addressLine2: formValues.addressLine2,
+                    first_name: formValues.first_name,
+                    last_name: formValues.last_name,
+                    address_line_1: formValues.address_line_1,
+                    address_line_2: formValues.address_line_2,
                     city: formValues.city,
-                    postCode: formValues.postCode,
+                    post_code: formValues.post_code,
                     method: "search"
                 })
             })
@@ -240,10 +241,10 @@ export default function InvoiceForm() {
             let index = searchResults[searchKey].searchResultLoops;
             setFormValues({
                 ...formValues,
-                addressLine1: searchResults[searchKey][index].addressLine1,
-                addressLine2: searchResults[searchKey][index].addressLine2,
+                address_line_1: searchResults[searchKey][index].address_line_1,
+                address_line_2: searchResults[searchKey][index].address_line_2,
                 city: searchResults[searchKey][index].city,
-                postCode: searchResults[searchKey][index].postCode
+                post_code: searchResults[searchKey][index].post_code
             })
 
             if (searchResults[searchKey].length > 1) {
@@ -256,7 +257,7 @@ export default function InvoiceForm() {
     const handleSubmit = (event) => {
         event.preventDefault();
         var submitValues = cloneDeep(formValues);
-        submitValues["invoiceDate"] = submitValues["invoiceDate"].format("YYYY-MM-DD");
+        submitValues["invoice_date"] = submitValues["invoice_date"].format("YYYY-MM-DD");
 
         if (event.nativeEvent.submitter.innerText === "DOWNLOAD") {
             submitValues["method"] = "download";
@@ -271,9 +272,9 @@ export default function InvoiceForm() {
                 .then(blob => {
                     var fileName = (
                         "Invoice_"
-                        + submitValues["firstName"]
-                        + "_" + submitValues["lastName"]
-                        + "_" + submitValues["invoiceDate"]
+                        + submitValues["first_name"]
+                        + "_" + submitValues["last_name"]
+                        + "_" + submitValues["invoice_date"]
                     )
                     download(blob, fileName, "application/pdf")
                 })
@@ -316,7 +317,7 @@ export default function InvoiceForm() {
                             name="firstName"
                             label="Client's first name"
                             fullWidth
-                            value={formValues.firstName}
+                            value={formValues.first_name}
                             onChange={handleInputChange}
                         />
                     </Grid>
@@ -327,7 +328,7 @@ export default function InvoiceForm() {
                             name="lastName"
                             label="Client's last name"
                             fullWidth
-                            value={formValues.lastName}
+                            value={formValues.last_name}
                             onChange={handleInputChange}
                         />
                     </Grid>
@@ -352,7 +353,7 @@ export default function InvoiceForm() {
                             name="addressLine1"
                             label="Client's address (line 1)"
                             fullWidth
-                            value={formValues.addressLine1}
+                            value={formValues.address_line_1}
                             onChange={handleInputChange}
                         />
                     </Grid>
@@ -362,7 +363,7 @@ export default function InvoiceForm() {
                             name="addressLine2"
                             label="Client's address (line 2)"
                             fullWidth
-                            value={formValues.addressLine2}
+                            value={formValues.address_line_2}
                             onChange={handleInputChange}
                         />
                     </Grid>
@@ -384,7 +385,7 @@ export default function InvoiceForm() {
                             name="postCode"
                             label="Client's postcode"
                             fullWidth
-                            value={formValues.postCode}
+                            value={formValues.post_code}
                             onChange={handleInputChange}
                         />
                     </Grid>
@@ -437,7 +438,7 @@ export default function InvoiceForm() {
                             name="invoiceNumber"
                             label="Invoice number"
                             fullWidth
-                            value={formValues.invoiceNumber}
+                            value={formValues.invoice_number}
                             onChange={handleInputChange}
                         />
                     </Grid>
@@ -450,7 +451,7 @@ export default function InvoiceForm() {
                                 id="invoiceDate"
                                 name="invoiceDate"
                                 label="Invoice dated"
-                                value={formValues.invoiceDate}
+                                value={formValues.invoice_date}
                                 onChange={handleInputChange}
                             />
                         </MuiPickersUtilsProvider>
@@ -464,7 +465,7 @@ export default function InvoiceForm() {
                                 id="payDate"
                                 name="payDate"
                                 label="Client to pay on"
-                                value={formValues.invoiceDate}
+                                value={formValues.pay_date}
                                 onChange={handleInputChange}
                             />
                         </MuiPickersUtilsProvider>
@@ -485,7 +486,7 @@ export default function InvoiceForm() {
                             name="emailAddress"
                             label="Client's email address"
                             fullWidth
-                            value={formValues.emailAddress}
+                            value={formValues.email_address}
                             onChange={handleInputChange}
                         />
                     </Grid>
@@ -495,7 +496,7 @@ export default function InvoiceForm() {
                             name="ccEmailAddress"
                             label="Cc email address"
                             fullWidth
-                            value={formValues.ccEmailAddress}
+                            value={formValues.cc_email_address}
                             onChange={handleInputChange}
                         />
                     </Grid>
