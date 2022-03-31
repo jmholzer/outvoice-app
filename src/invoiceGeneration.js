@@ -434,7 +434,7 @@ export default function InvoiceForm() {
                             <TotalSum rowData={rowData}></TotalSum>
                         </Grid>
                     </Grid>
-
+                    <Grid item xs={12} sm={12} style={{ 'paddingTop': '0px' }}></Grid>
                     <Grid item xs={12} sm={4}>
                         <TextField
                             required

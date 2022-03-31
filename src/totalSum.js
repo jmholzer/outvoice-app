@@ -1,5 +1,6 @@
 import React,{useState , useEffect} from 'react';
 import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 import { currencyFormatter } from './currencyFormatter.js';
 import { calculateTotal } from './calculateTotal.js';
 
@@ -17,7 +18,9 @@ export default function TotalSum(props) {
             align="right"
             style={{ 'paddingRight': '60px' }}
             >
-                Total {currencyFormatter(calculateTotal(rowData), "£")}
+                <Box fontSize = {20} fontStyle="oblique" m={1}>
+                    Total – {currencyFormatter(calculateTotal(rowData), "£")}
+                </Box>
         </Typography>
     );
 };
