@@ -24,6 +24,7 @@ import Divider from '@material-ui/core/Divider';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { currencyFormatter } from './currencyFormatter.js';
+import { calculateTotal } from './calculateTotal';
 
 const BlueTextTypography = withStyles({
     root: {
@@ -258,6 +259,9 @@ export default function InvoiceForm() {
         event.preventDefault();
         var submitValues = cloneDeep(formValues);
         submitValues["invoice_date"] = submitValues["invoice_date"].format("YYYY-MM-DD");
+        // Add line items, balance
+        submitValues["line_items"] = cloneDeep(rowData);
+        submitValues["balance"] = calculateTotal(rowData);
 
         if (event.nativeEvent.submitter.innerText === "DOWNLOAD") {
             submitValues["method"] = "download";

@@ -1,16 +1,7 @@
 import React,{useState , useEffect} from 'react';
 import Typography from '@material-ui/core/Typography';
 import { currencyFormatter } from './currencyFormatter.js';
-
-function calculateTotal(rowData) {
-    var result = 0;
-    //console.log(rowData);
-    console.log(typeof(rowData))
-    for (let row of rowData) {
-        result += row.costPerItem * row.count 
-    }
-    return result;
-}
+import { calculateTotal } from './calculateTotal.js';
 
 export default function TotalSum(props) {
 
