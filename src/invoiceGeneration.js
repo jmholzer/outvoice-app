@@ -277,11 +277,6 @@ export default function InvoiceForm() {
                     )
                     download(blob, fileName, "application/pdf")
                 })
-                .then(
-                    setFormValues(
-                        defaultFormValues
-                    )
-                );
         }
         else if (event.nativeEvent.submitter.innerText === "PRINT") {
             submitValues["method"] = "print";
@@ -507,7 +502,7 @@ export default function InvoiceForm() {
                     <Grid container justify="center" sm={12} style={{ 'paddingTop': '17px' }}>
                         <IconButton aria-label="download"  style={{ 'paddingTop': '15px', 'borderRadius': 0}}>
                             <Tooltip title="Download a copy">
-                                <CloudDownload style={{ color: "#3B97D3" }} />
+                                <CloudDownload onClick={handleSubmit} style={{ color: "#3B97D3" }} />
                             </Tooltip>
                         </IconButton>
                         <FormControlButton
