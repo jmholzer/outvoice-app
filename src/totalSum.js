@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { currencyFormatter } from './currencyFormatter.js';
 import { calculateTotal } from './calculateTotal.js';
-import { calculateTax } from './calculateTax.js'
+import { taxRate } from './calculateTax.js'
 
 export default function TotalSum(props) {
 
@@ -14,7 +14,7 @@ export default function TotalSum(props) {
     }, [props.rowData]);
 
     var subtotal = calculateTotal(rowData);
-    var tax = calculateTax(subtotal);
+    var tax = taxRate * subtotal;
     var total = subtotal + tax;
 
     return (

@@ -25,7 +25,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { currencyFormatter } from './currencyFormatter.js';
 import { calculateTotal } from './calculateTotal';
-import { calculateTax } from './calculateTax.js'
+import { taxRate } from './calculateTax.js'
 
 const BlueTextTypography = withStyles({
     root: {
@@ -263,9 +263,7 @@ export default function InvoiceForm() {
         // Add line items, balance
         submitValues["line_items"] = cloneDeep(rowData);
         submitValues["subtotal"] = calculateTotal(rowData);
-        // calculating this in the front end is bad, I know
-        submitValues["tax"] = calculateTax(submitValues["subtotal"]);
-        submitValues["balance"] = submitValues["subtotal"] + submitValues["tax"];
+        submitValues["tax"] = taxRate;
 
         if (event.nativeEvent.submitter.innerText === "DOWNLOAD") {
             submitValues["method"] = "download";

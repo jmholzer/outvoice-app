@@ -1,5 +1,3 @@
-function calculateTax(subtotal) {
-    return 0.2 * subtotal;
-}
+const taxRate = 0.2;
 
-export { calculateTax }
+export { taxRate }
