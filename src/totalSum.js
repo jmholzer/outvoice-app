@@ -28,6 +28,9 @@ export default function TotalSum(props) {
                     Subtotal – {currencyFormatter(subtotal, "£")}
                 </Box>
                 <Box display="inline" fontSize = {14} fontStyle="oblique" m={1}>
+                    |
+                </Box>
+                <Box display="inline" fontSize = {14} fontStyle="oblique" m={1}>
                     VAT (20%) – {currencyFormatter(tax, "£")}
                 </Box>
                 <Box fontSize = {20} fontStyle="oblique" m={1}>
