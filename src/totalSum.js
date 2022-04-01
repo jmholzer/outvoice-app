@@ -19,15 +19,16 @@ export default function TotalSum(props) {
 
     return (
         <Typography 
-            inline variant="subtitle1"
+            display="inline"
+            variant="subtitle1"
             align="right"
             style={{ 'paddingRight': '60px' }}
             >
-                <Box fontSize = {14} fontStyle="oblique" m={1}>
+                <Box display="inline" fontSize = {14} fontStyle="oblique" m={1}>
                     Subtotal – {currencyFormatter(subtotal, "£")}
                 </Box>
-                <Box fontSize = {14} fontStyle="oblique" m={1}>
-                    VAT – {currencyFormatter(tax, "£")}
+                <Box display="inline" fontSize = {14} fontStyle="oblique" m={1}>
+                    VAT (20%) – {currencyFormatter(tax, "£")}
                 </Box>
                 <Box fontSize = {20} fontStyle="oblique" m={1}>
                     Total – {currencyFormatter(total, "£")}
