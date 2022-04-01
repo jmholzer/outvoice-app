@@ -3,7 +3,7 @@ function calculateTotal(rowData) {
     //console.log(rowData);
     console.log(typeof(rowData))
     for (let row of rowData) {
-        result += row.costPerItem * row.count 
+        result += row.cost_per_item * row.count 
     }
     return result;
 }

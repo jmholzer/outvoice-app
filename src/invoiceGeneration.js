@@ -54,14 +54,14 @@ const defaultAlertState = {
 };
 
 const calculateAmountDue = (params) => {
-    let amountDue = Number(params.data.count) * Number(params.data.costPerItem);
+    let amountDue = Number(params.data.count) * Number(params.data.cost_per_item);
     return currencyFormatter(amountDue, "£")
 };
 
 function createLineItem() {
     const item = {
         "item": "",
-        "costPerItem": null,
+        "cost_per_item": null,
         "count": null
     };
     return item;
@@ -73,7 +73,7 @@ export default function InvoiceForm() {
     const [formValues, setFormValues] = useState(defaultFormValues);
     const [alert, setAlert] = useState(defaultAlertState);
     const [rowData, setRowData] = useState([
-        {"item": "", "costPerItem": 0, "count": 0}
+        {"item": "", "cost_per_item": 0, "count": 0}
     ]);
     const [columnDefs] = useState([
         {
@@ -85,11 +85,11 @@ export default function InvoiceForm() {
         },
         {
             headerName: "Cost per Item",
-            field: "costPerItem",
+            field: "cost_per_item",
             resizable: true,
             minWidth: 30,
             editable: true,
-            valueFormatter: params => currencyFormatter(params.data.costPerItem, '£'),
+            valueFormatter: params => currencyFormatter(params.data.cost_per_item, '£'),
             filter: 'agNumberColumnFilter',
             filterParams: {
               suppressAndOrCondition: true,
