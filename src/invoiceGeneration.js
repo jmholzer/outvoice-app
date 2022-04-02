@@ -150,9 +150,11 @@ export default function InvoiceForm() {
 
     const handleInputChange = (e) => {
         if (e._isAMomentObject) {
+            let caller = e.caller;
+            delete caller.e;
             setFormValues({
                 ...formValues,
-                ["invoice_date"]: e
+                [caller]: e
             })
         }
         else {
@@ -256,16 +258,18 @@ export default function InvoiceForm() {
         }
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSubmit = (method) => {
+        //event.preventDefault();
         var submitValues = cloneDeep(formValues);
         submitValues["invoice_date"] = submitValues["invoice_date"].format("YYYY-MM-DD");
+        submitValues["pay_date"] = submitValues["pay_date"].format("YYYY-MM-DD");
         // Add line items, balance
         submitValues["line_items"] = cloneDeep(rowData);
         submitValues["subtotal"] = calculateTotal(rowData);
         submitValues["tax"] = taxRate;
-
-        if (event.nativeEvent.submitter.innerText === "DOWNLOAD") {
+        //console.log(event);
+        //console.log(event.submitter);
+        if (method == "download") {
             submitValues["method"] = "download";
             fetch("http://api.outvoice.com:8000/invoice", {
                 method: "POST",
@@ -285,7 +289,8 @@ export default function InvoiceForm() {
                     download(blob, fileName, "application/pdf")
                 })
         }
-        else if (event.nativeEvent.submitter.innerText === "PRINT") {
+        //else if (event.nativeEvent.submitter.innerText === "PRINT") {
+        else if (method == "email") {
             submitValues["method"] = "print";
             fetch("http://api.outvoice.com:8000/invoice", {
                 method: "POST",
@@ -319,8 +324,8 @@ export default function InvoiceForm() {
                     <Grid item xs={12} sm={5}>
                         <TextField
                             required
-                            id="firstName"
-                            name="firstName"
+                            id="first_name"
+                            name="first_name"
                             label="Client's first name"
                             fullWidth
                             value={formValues.first_name}
@@ -330,8 +335,8 @@ export default function InvoiceForm() {
                     <Grid item xs={12} sm={5}>
                         <TextField
                             required
-                            id="lastName"
-                            name="lastName"
+                            id="last_name"
+                            name="last_name"
                             label="Client's last name"
                             fullWidth
                             value={formValues.last_name}
@@ -355,8 +360,8 @@ export default function InvoiceForm() {
                     <Grid item xs={12}>
                         <TextField
                             required
-                            id="addressLine1"
-                            name="addressLine1"
+                            id="address_line_1"
+                            name="address_line_1"
                             label="Client's address (line 1)"
                             fullWidth
                             value={formValues.address_line_1}
@@ -365,8 +370,8 @@ export default function InvoiceForm() {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            id="addressLine2"
-                            name="addressLine2"
+                            id="address_line_2"
+                            name="address_line_2"
                             label="Client's address (line 2)"
                             fullWidth
                             value={formValues.address_line_2}
@@ -387,8 +392,8 @@ export default function InvoiceForm() {
                     <Grid item xs={12} sm={6}>
                         <TextField
                             required
-                            id="postCode"
-                            name="postCode"
+                            id="post_code"
+                            name="post_code"
                             label="Client's postcode"
                             fullWidth
                             value={formValues.post_code}
@@ -440,8 +445,8 @@ export default function InvoiceForm() {
                     <Grid item xs={12} sm={4}>
                         <TextField
                             required
-                            id="invoiceNumber"
-                            name="invoiceNumber"
+                            id="invoice_number"
+                            name="invoice_number"
                             label="Invoice number"
                             fullWidth
                             value={formValues.invoice_number}
@@ -454,11 +459,14 @@ export default function InvoiceForm() {
                                 required
                                 clearable
                                 format="DD/MM/YYYY"
-                                id="invoiceDate"
-                                name="invoiceDate"
+                                id="invoice_date"
+                                name="invoice_date"
                                 label="Invoice dated"
                                 value={formValues.invoice_date}
-                                onChange={handleInputChange}
+                                onChange={(e) => {
+                                    e.caller = "invoice_date"
+                                    handleInputChange(e)
+                                }}
                             />
                         </MuiPickersUtilsProvider>
                     </Grid>
@@ -468,11 +476,14 @@ export default function InvoiceForm() {
                                 required
                                 clearable
                                 format="DD/MM/YYYY"
-                                id="payDate"
-                                name="payDate"
+                                id="pay_date"
+                                name="pay_date"
                                 label="Client to pay on"
                                 value={formValues.pay_date}
-                                onChange={handleInputChange}
+                                onChange={(e) => {
+                                    e.caller = "pay_date"
+                                    handleInputChange(e)
+                                }}
                             />
                         </MuiPickersUtilsProvider>
                     </Grid>
@@ -488,8 +499,8 @@ export default function InvoiceForm() {
                     <Grid item xs={12} sm={6}>
                         <TextField
                             required
-                            id="emailAddress"
-                            name="emailAddress"
+                            id="email_address"
+                            name="email_address"
                             label="Client's email address"
                             fullWidth
                             value={formValues.email_address}
@@ -498,8 +509,8 @@ export default function InvoiceForm() {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            id="ccEmailAddress"
-                            name="ccEmailAddress"
+                            id="cc_email_address"
+                            name="cc_email_address"
                             label="Cc email address"
                             fullWidth
                             value={formValues.cc_email_address}
@@ -509,7 +520,7 @@ export default function InvoiceForm() {
                     <Grid container justify="center" sm={12} style={{ 'paddingTop': '17px' }}>
                         <IconButton aria-label="download"  style={{ 'paddingTop': '15px', 'borderRadius': 0}}>
                             <Tooltip title="Download a copy">
-                                <CloudDownload onClick={handleSubmit} style={{ color: "#3B97D3" }} />
+                                <CloudDownload onClick={(e) => handleSubmit("download")} style={{ color: "#3B97D3" }} />
                             </Tooltip>
                         </IconButton>
                         <FormControlButton
