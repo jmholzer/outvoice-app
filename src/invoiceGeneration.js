@@ -295,7 +295,6 @@ export default function InvoiceForm() {
                     download(blob, fileName, "application/pdf")
                 })
         }
-        //else if (event.nativeEvent.submitter.innerText === "PRINT") {
         else if (method == "email") {
             submitValues["method"] = "email";
             fetch("http://api.outvoice.com:8000/invoice", {
@@ -305,6 +304,22 @@ export default function InvoiceForm() {
                 },
                 body: JSON.stringify(submitValues)
             })
+                .then(response => response.json())
+                .then(response => {
+                    if(response.success) {
+                        setAlert({
+                            open: true,
+                            severity: "success",
+                            message: "Invoice sent",
+                        });
+                    } else {
+                        setAlert({
+                            open: true,
+                            severity: "info",
+                            message: "Invoice failed to send",
+                        });
+                    }
+                })
                 .then(
                     setFormValues(
                         defaultFormValues
