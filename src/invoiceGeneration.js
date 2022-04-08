@@ -315,7 +315,7 @@ export default function InvoiceForm() {
                     } else {
                         setAlert({
                             open: true,
-                            severity: "info",
+                            severity: "error",
                             message: "Invoice failed to send",
                         });
                     }
