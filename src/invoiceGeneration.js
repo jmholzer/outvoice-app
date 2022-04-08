@@ -26,6 +26,8 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { currencyFormatter } from './currencyFormatter.js';
 import { calculateTotal } from './calculateTotal';
 import { taxRate } from './calculateTax.js'
+import Button from '@material-ui/core/Button';
+import Email from './icons/Email';
 
 const BlueTextTypography = withStyles({
     root: {
@@ -61,8 +63,8 @@ const calculateAmountDue = (params) => {
 function createLineItem() {
     const item = {
         "item": "",
-        "cost_per_item": null,
-        "count": null
+        "cost_per_item": 0,
+        "count": 0
     };
     return item;
 }
@@ -73,7 +75,11 @@ export default function InvoiceForm() {
     const [formValues, setFormValues] = useState(defaultFormValues);
     const [alert, setAlert] = useState(defaultAlertState);
     const [rowData, setRowData] = useState([
-        {"item": "", "cost_per_item": 0, "count": 0}
+        {
+            "item": "",
+            "cost_per_item": 0,
+            "count": 0
+        }
     ]);
     const [columnDefs] = useState([
         {
@@ -135,7 +141,7 @@ export default function InvoiceForm() {
         const selectedRowNodes = gridRef.current.api.getSelectedNodes();
         const selectedIds = selectedRowNodes.map(function (rowNode) {
             return Number(rowNode.id);
-        });;
+        });
         setRowData(rowData.filter((_, index) => !selectedIds.includes(index)));
     }, [rowData]);
 
@@ -258,7 +264,9 @@ export default function InvoiceForm() {
         }
     }
 
-    const handleSubmit = (method) => {
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        var method = e.method
         //event.preventDefault();
         var submitValues = cloneDeep(formValues);
         submitValues["invoice_date"] = submitValues["invoice_date"].format("YYYY-MM-DD");
@@ -267,8 +275,6 @@ export default function InvoiceForm() {
         submitValues["line_items"] = cloneDeep(rowData);
         submitValues["subtotal"] = calculateTotal(rowData);
         submitValues["tax"] = taxRate;
-        //console.log(event);
-        //console.log(event.submitter);
         if (method == "download") {
             submitValues["method"] = "download";
             fetch("http://api.outvoice.com:8000/invoice", {
@@ -291,7 +297,7 @@ export default function InvoiceForm() {
         }
         //else if (event.nativeEvent.submitter.innerText === "PRINT") {
         else if (method == "email") {
-            submitValues["method"] = "print";
+            submitValues["method"] = "email";
             fetch("http://api.outvoice.com:8000/invoice", {
                 method: "POST",
                 headers: {
@@ -303,7 +309,10 @@ export default function InvoiceForm() {
                     setFormValues(
                         defaultFormValues
                     )
-                );
+                )
+                .then(
+                    setRowData([{"item": "", "cost_per_item": 0, "count": 0}])
+                )
         }
 
         // reset search results as these may have changed
@@ -313,7 +322,7 @@ export default function InvoiceForm() {
     return (
         <React.Fragment>
             <Box mt={2} />
-            <form onSubmit={handleSubmit}>
+            <form novalidate="novalidate" autoComplete="new-password">
                 <Grid container spacing={3}>
                     <BlueTextTypography variant="h6" gutterBottom component="div">
                         Client's details...
@@ -327,6 +336,7 @@ export default function InvoiceForm() {
                             id="first_name"
                             name="first_name"
                             label="Client's first name"
+                            autoComplete="new-password"
                             fullWidth
                             value={formValues.first_name}
                             onChange={handleInputChange}
@@ -338,6 +348,7 @@ export default function InvoiceForm() {
                             id="last_name"
                             name="last_name"
                             label="Client's last name"
+                            autoComplete="new-password"
                             fullWidth
                             value={formValues.last_name}
                             onChange={handleInputChange}
@@ -363,6 +374,7 @@ export default function InvoiceForm() {
                             id="address_line_1"
                             name="address_line_1"
                             label="Client's address (line 1)"
+                            autoComplete="new-password"
                             fullWidth
                             value={formValues.address_line_1}
                             onChange={handleInputChange}
@@ -373,6 +385,7 @@ export default function InvoiceForm() {
                             id="address_line_2"
                             name="address_line_2"
                             label="Client's address (line 2)"
+                            autoComplete="new-password"
                             fullWidth
                             value={formValues.address_line_2}
                             onChange={handleInputChange}
@@ -384,6 +397,7 @@ export default function InvoiceForm() {
                             id="city"
                             name="city"
                             label="Client's city"
+                            autoComplete="new-password"
                             fullWidth
                             value={formValues.city}
                             onChange={handleInputChange}
@@ -394,6 +408,7 @@ export default function InvoiceForm() {
                             required
                             id="post_code"
                             name="post_code"
+                            autoComplete="new-password"
                             label="Client's postcode"
                             fullWidth
                             value={formValues.post_code}
@@ -448,6 +463,7 @@ export default function InvoiceForm() {
                             id="invoice_number"
                             name="invoice_number"
                             label="Invoice number"
+                            autoComplete="new-password"
                             fullWidth
                             value={formValues.invoice_number}
                             onChange={handleInputChange}
@@ -502,6 +518,7 @@ export default function InvoiceForm() {
                             id="email_address"
                             name="email_address"
                             label="Client's email address"
+                            autoComplete="new-password"
                             fullWidth
                             value={formValues.email_address}
                             onChange={handleInputChange}
@@ -512,6 +529,7 @@ export default function InvoiceForm() {
                             id="cc_email_address"
                             name="cc_email_address"
                             label="Cc email address"
+                            autoComplete="new-password"
                             fullWidth
                             value={formValues.cc_email_address}
                             onChange={handleInputChange}
@@ -520,14 +538,34 @@ export default function InvoiceForm() {
                     <Grid container justify="center" sm={12} style={{ 'paddingTop': '17px' }}>
                         <IconButton aria-label="download"  style={{ 'paddingTop': '15px', 'borderRadius': 0}}>
                             <Tooltip title="Download a copy">
-                                <CloudDownload onClick={(e) => handleSubmit("download")} style={{ color: "#3B97D3" }} />
+                                <CloudDownload
+                                    onClick={(e) => {
+                                        e.method = "download";
+                                        handleSubmit(e)
+                                    }}
+                                    style={{ color: "#3B97D3" }}
+                                />
                             </Tooltip>
                         </IconButton>
-                        <FormControlButton
-                            buttonType="email"
-                            name="email"
-                            style="form"
-                        />
+                        <Button
+                            variant="outlined"
+                            size="large"
+                            type="submit"
+                            onClick={(e) => {
+                                e.method = "email";
+                                handleSubmit(e);
+                            }}
+                            style={{
+                                color: "#3B97D3",
+                                borderColor: "#3B97D3",
+                                width: "162px",
+                                marginLeft: "10px",
+                                marginRight: "10px"
+                              }}
+                            endIcon={<Email />}
+                        >
+                            Email
+                        </Button>
                     </Grid>
                 </Grid>
             </form>
