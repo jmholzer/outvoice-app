@@ -8,9 +8,9 @@ import Add from '@material-ui/icons/Add';
 import Remove from '@material-ui/icons/Remove';
 import Search from '@material-ui/icons/Search';
 import Delete from '@material-ui/icons/Delete';
+import Email from '@material-ui/icons/Email';
 import Tooltip from '@material-ui/core/Tooltip';
 import CloudDownload from '@material-ui/icons/CloudDownload';
-import FormControlButton from './formControlButton';
 import TotalSum from './totalSum';
 import download from './download';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -27,8 +27,7 @@ import { currencyFormatter } from './currencyFormatter.js';
 import { calculateTotal } from './calculateTotal';
 import { taxRate } from './calculateTax.js'
 import Button from '@material-ui/core/Button';
-import Email from './icons/Email';
-
+import Footer from './footer'
 const BlueTextTypography = withStyles({
     root: {
         color: "#3B97D3"
@@ -68,7 +67,7 @@ function createLineItem() {
     };
     return item;
 }
-  
+
 var searchResults = {};
 
 export default function InvoiceForm() {
@@ -98,8 +97,8 @@ export default function InvoiceForm() {
             valueFormatter: params => currencyFormatter(params.data.cost_per_item, '£'),
             filter: 'agNumberColumnFilter',
             filterParams: {
-              suppressAndOrCondition: true,
-              filterOptions: ['greaterThan'],
+                suppressAndOrCondition: true,
+                filterOptions: ['greaterThan'],
             }
         },
         {
@@ -118,8 +117,8 @@ export default function InvoiceForm() {
             //valueFormatter: params => currencyFormatter(params.data.amountDue, '£'),
             filter: 'agNumberColumnFilter',
             filterParams: {
-              suppressAndOrCondition: true,
-              filterOptions: ['greaterThan'],
+                suppressAndOrCondition: true,
+                filterOptions: ['greaterThan'],
             },
             valueGetter: calculateAmountDue
         }
@@ -190,7 +189,7 @@ export default function InvoiceForm() {
         })
             .then(response => response.json())
             .then(response => {
-                if(response.success) {
+                if (response.success) {
                     setAlert({
                         open: true,
                         severity: "success",
@@ -306,7 +305,7 @@ export default function InvoiceForm() {
             })
                 .then(response => response.json())
                 .then(response => {
-                    if(response.success) {
+                    if (response.success) {
                         setAlert({
                             open: true,
                             severity: "success",
@@ -326,7 +325,7 @@ export default function InvoiceForm() {
                     )
                 )
                 .then(
-                    setRowData([{"item": "", "cost_per_item": 0, "count": 0}])
+                    setRowData([{ "item": "", "cost_per_item": 0, "count": 0 }])
                 )
         }
 
@@ -466,7 +465,7 @@ export default function InvoiceForm() {
                         </IconButton>
                     </Grid>
                     <Grid container justify="space-between" sm={12}>
-                        <Grid container justify="space-between">  
+                        <Grid container justify="space-between">
                             <Typography inline variant="h6" align="left"></Typography>
                             <TotalSum rowData={rowData}></TotalSum>
                         </Grid>
@@ -551,7 +550,7 @@ export default function InvoiceForm() {
                         />
                     </Grid>
                     <Grid container justify="center" sm={12} style={{ 'paddingTop': '17px' }}>
-                        <IconButton aria-label="download"  style={{ 'paddingTop': '15px', 'borderRadius': 0}}>
+                        <IconButton aria-label="download" style={{ 'paddingTop': '15px', 'borderRadius': 0 }}>
                             <Tooltip title="Download a copy">
                                 <CloudDownload
                                     onClick={(e) => {
@@ -576,7 +575,7 @@ export default function InvoiceForm() {
                                 width: "162px",
                                 marginLeft: "10px",
                                 marginRight: "10px"
-                              }}
+                            }}
                             endIcon={<Email />}
                         >
                             Email
@@ -590,6 +589,7 @@ export default function InvoiceForm() {
                 message={alert.message}
                 resetState={resetAlertState}
             />
+            <Footer />
         </React.Fragment>
     );
 }
