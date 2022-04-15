@@ -4,7 +4,6 @@ import Container from '../node_modules/@material-ui/core/Container';
 import Typography from '../node_modules/@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import WorkflowTabs from './workflowTabs';
-import Divider from '@material-ui/core/Divider';
 import Box from '@material-ui/core/Box';
 import { Icon } from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
@@ -19,7 +18,7 @@ const TitleTypography = withStyles({
 const Logo = () => {
   return (
     <Icon>
-          <img src={outvoice} height={60} width={60}/>
+      <img src={outvoice} height={60} width={60} />
     </Icon>
   )
 }
