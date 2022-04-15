@@ -26,7 +26,7 @@ function Notification(props) {
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
         setAlert({
             ...alert,
