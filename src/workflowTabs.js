@@ -63,7 +63,6 @@ export default function WorkflowTabs() {
         <AppBar position="static" style={{ backgroundColor: '#3B97D3' }}>
           <Tabs value={value} onChange={handleChange} centered TabIndicatorProps={{style: {backgroundColor: '#FFFFFF'}}}>
             <Tab label="SEND AN INVOICE" {...a11yProps(0)} />
-            <Tab label="USER GUIDE" {...a11yProps(1)} />
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0} >
