@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+The frontend code for Outvoice, a web application that allows small business owners to generate invoices in seconds.
+
+Made using React and Material UI (v4).
+
+See a two-minute demo at https://youtu.be/OFn-FTn580I.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
